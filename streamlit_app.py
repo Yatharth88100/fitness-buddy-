@@ -13,38 +13,50 @@ st.set_page_config(
 
 st.markdown("""
 <style>
-.stApp {
-    background-color: #0B0F19;
-    color: white;
+
+.stApp{
+    background: linear-gradient(
+        135deg,
+        #F8FAFC 0%,
+        #EEF2FF 50%,
+        #ECFEFF 100%
+    );
 }
 
-.main-title {
-    font-size: 42px;
-    font-weight: bold;
-    color: #D4AF37;
-    text-align: center;
-}
-
-.sub-title {
-    text-align: center;
-    color: #AAAAAA;
-    margin-bottom: 30px;
-}
-
-.card {
-    background-color: #141B2D;
-    padding: 20px;
-    border-radius: 15px;
-    margin-bottom: 15px;
-    border: 1px solid #D4AF37;
-}
-
-.metric {
+.main-title{
     text-align:center;
-    font-size:22px;
-    font-weight:bold;
-    color:#D4AF37;
+    font-size:55px;
+    font-weight:800;
+    color:#4F46E5;
+    margin-bottom:0px;
 }
+
+.subtitle{
+    text-align:center;
+    color:#64748B;
+    font-size:18px;
+    margin-bottom:30px;
+}
+
+div[data-testid="stMetric"]{
+    background:white;
+    padding:15px;
+    border-radius:20px;
+    box-shadow:0 8px 20px rgba(0,0,0,0.08);
+}
+
+section[data-testid="stSidebar"]{
+    background:white;
+}
+
+h1,h2,h3{
+    color:#0F172A;
+}
+
+.block-container{
+    padding-top:2rem;
+}
+
 </style>
 """, unsafe_allow_html=True)
 
