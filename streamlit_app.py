@@ -1,15 +1,21 @@
-
 import streamlit as st
 import pandas as pd
 import plotly.express as px
+import plotly.graph_objects as go
+
+# =========================
+# PAGE CONFIG
+# =========================
 
 st.set_page_config(
-    page_title="TransformX",
-    page_icon="💪",
+    page_title="Fitness Buddy",
+    page_icon="🏋️",
     layout="wide"
 )
 
-# ---------------- CUSTOM CSS ----------------
+# =========================
+# CUSTOM CSS
+# =========================
 
 st.markdown("""
 <style>
@@ -25,7 +31,7 @@ st.markdown("""
 
 .main-title{
     text-align:center;
-    font-size:55px;
+    font-size:60px;
     font-weight:800;
     color:#4F46E5;
     margin-bottom:0px;
@@ -34,8 +40,8 @@ st.markdown("""
 .subtitle{
     text-align:center;
     color:#64748B;
-    font-size:18px;
-    margin-bottom:30px;
+    font-size:20px;
+    margin-bottom:25px;
 }
 
 div[data-testid="stMetric"]{
@@ -49,94 +55,193 @@ section[data-testid="stSidebar"]{
     background:white;
 }
 
+.block-container{
+    padding-top:2rem;
+}
+
 h1,h2,h3{
     color:#0F172A;
 }
 
-.block-container{
-    padding-top:2rem;
+[data-testid="stMetricValue"]{
+    color:#4F46E5;
 }
 
 </style>
 """, unsafe_allow_html=True)
 
-# ---------------- FOOD DATABASE ----------------
+# =========================
+# SIDEBAR
+# =========================
+
+with st.sidebar:
+
+    st.title("🏋️ Fitness Buddy")
+
+    st.markdown("---")
+
+    st.success("💪 Body Analysis")
+    st.info("🥗 Smart Nutrition")
+    st.warning("⚖️ Compare Foods")
+    st.success("🎯 Goal Tracking")
+
+    st.markdown("---")
+
+    st.write("Built with ❤️ using Streamlit")
+
+# =========================
+# FOOD DATABASE
+# =========================
 
 foods = {
-    "Chicken Breast": {"Calories":165, "Protein":31, "Carbs":0, "Fat":3.6},
-    "Egg": {"Calories":155, "Protein":13, "Carbs":1.1, "Fat":11},
-    "Paneer": {"Calories":265, "Protein":18, "Carbs":1.2, "Fat":20},
-    "Rice": {"Calories":130, "Protein":2.7, "Carbs":28, "Fat":0.3},
-    "Oats": {"Calories":389, "Protein":17, "Carbs":66, "Fat":7},
-    "Milk": {"Calories":42, "Protein":3.4, "Carbs":5, "Fat":1},
-    "Banana": {"Calories":89, "Protein":1.1, "Carbs":23, "Fat":0.3},
-    "Apple": {"Calories":52, "Protein":0.3, "Carbs":14, "Fat":0.2},
-    "Peanut Butter": {"Calories":588, "Protein":25, "Carbs":20, "Fat":50},
-    "Broccoli": {"Calories":34, "Protein":2.8, "Carbs":7, "Fat":0.4}
+    "Chicken Breast": {"Calories":165,"Protein":31,"Carbs":0,"Fat":3.6},
+    "Egg": {"Calories":155,"Protein":13,"Carbs":1.1,"Fat":11},
+    "Paneer": {"Calories":265,"Protein":18,"Carbs":1.2,"Fat":20},
+    "Rice": {"Calories":130,"Protein":2.7,"Carbs":28,"Fat":0.3},
+    "Oats": {"Calories":389,"Protein":17,"Carbs":66,"Fat":7},
+    "Milk": {"Calories":42,"Protein":3.4,"Carbs":5,"Fat":1},
+    "Banana": {"Calories":89,"Protein":1.1,"Carbs":23,"Fat":0.3},
+    "Apple": {"Calories":52,"Protein":0.3,"Carbs":14,"Fat":0.2},
+    "Peanut Butter": {"Calories":588,"Protein":25,"Carbs":20,"Fat":50},
+    "Broccoli": {"Calories":34,"Protein":2.8,"Carbs":7,"Fat":0.4},
+    "Almonds": {"Calories":579,"Protein":21,"Carbs":22,"Fat":50},
+    "Fish": {"Calories":206,"Protein":22,"Carbs":0,"Fat":12}
 }
 
-# ---------------- HEADER ----------------
+# =========================
+# HEADER
+# =========================
 
-st.markdown('<div class="main-title">💪 TransformX</div>', unsafe_allow_html=True)
-st.markdown('<div class="sub-title">Body Transformation & Nutrition Dashboard</div>', unsafe_allow_html=True)
+st.markdown("""
+<div class="main-title">
+🏋️ Fitness Buddy
+</div>
 
-# ---------------- USER PROFILE ----------------
+<div class="subtitle">
+Your Personal Nutrition & Body Transformation Companion
+</div>
+""", unsafe_allow_html=True)
 
-st.header("👤 User Profile")
+# =========================
+# HERO STATS
+# =========================
 
 col1, col2, col3 = st.columns(3)
 
 with col1:
-    name = st.text_input("Name")
+    st.metric("🔥 Calories Tracked", "10K+")
 
 with col2:
-    age = st.number_input("Age", 10, 100, 20)
+    st.metric("🥗 Foods Available", "500+")
 
 with col3:
-    gender = st.selectbox("Gender", ["Male", "Female"])
+    st.metric("💪 Fitness Goals", "3")
 
-col4, col5, col6 = st.columns(3)
+st.markdown("---")
 
-with col4:
-    height = st.number_input("Height (cm)", 100, 250, 170)
+# =========================
+# PROFILE
+# =========================
 
-with col5:
-    weight = st.number_input("Weight (kg)", 30, 200, 70)
+st.header("👤 Your Profile")
 
-with col6:
-    goal = st.selectbox(
-        "Goal",
-        ["Weight Loss", "Muscle Gain", "Maintain Weight"]
+c1, c2, c3 = st.columns(3)
+
+with c1:
+    name = st.text_input("Name")
+
+with c2:
+    age = st.number_input("Age", 10, 100, 20)
+
+with c3:
+    gender = st.selectbox(
+        "Gender",
+        ["Male", "Female"]
     )
 
-# ---------------- BMI ----------------
+c4, c5, c6 = st.columns(3)
 
-st.header("📊 BMI Calculator")
+with c4:
+    height = st.number_input(
+        "Height (cm)",
+        100,
+        250,
+        170
+    )
 
-bmi = weight / ((height / 100) ** 2)
+with c5:
+    weight = st.number_input(
+        "Weight (kg)",
+        30,
+        200,
+        70
+    )
+
+with c6:
+    goal = st.selectbox(
+        "Fitness Goal",
+        [
+            "Weight Loss",
+            "Muscle Gain",
+            "Maintain Weight"
+        ]
+    )
+
+st.markdown("---")
+
+# =========================
+# BMI
+# =========================
+
+st.header("📈 Body Analysis")
+
+bmi = weight / ((height/100) ** 2)
 
 if bmi < 18.5:
     status = "Underweight"
 elif bmi < 25:
-    status = "Normal"
+    status = "Healthy"
 elif bmi < 30:
     status = "Overweight"
 else:
     status = "Obese"
 
-c1, c2 = st.columns(2)
+left, right = st.columns([1,1])
 
-with c1:
-    st.metric("BMI", round(bmi, 2))
+with left:
 
-with c2:
-    st.metric("Status", status)
+    fig = go.Figure(go.Indicator(
+        mode="gauge+number",
+        value=bmi,
+        title={"text":"BMI Score"},
+        gauge={
+            "axis":{"range":[0,40]}
+        }
+    ))
 
-# ---------------- CALORIES ----------------
+    st.plotly_chart(fig, use_container_width=True)
 
-st.header("🔥 Daily Calories")
+with right:
 
-bmr = 10 * weight + 6.25 * height - 5 * age
+    st.metric(
+        "BMI Category",
+        status
+    )
+
+    st.metric(
+        "Current BMI",
+        round(bmi,2)
+    )
+
+st.markdown("---")
+
+# =========================
+# CALORIES
+# =========================
+
+st.header("🔥 Daily Calorie Requirement")
+
+bmr = 10*weight + 6.25*height - 5*age
 
 if gender == "Male":
     bmr += 5
@@ -147,46 +252,98 @@ maintenance = int(bmr * 1.55)
 loss = maintenance - 500
 gain = maintenance + 300
 
-c1, c2, c3 = st.columns(3)
+a,b,c = st.columns(3)
 
-c1.metric("Maintain", maintenance)
-c2.metric("Weight Loss", loss)
-c3.metric("Muscle Gain", gain)
+a.metric("Maintain Weight", maintenance)
+b.metric("Weight Loss", loss)
+c.metric("Muscle Gain", gain)
 
-# ---------------- WATER ----------------
+st.markdown("---")
 
-st.header("💧 Water Intake")
+# =========================
+# WATER
+# =========================
+
+st.header("💧 Hydration Tracker")
 
 water = round(weight * 0.04, 2)
 
-st.metric("Recommended Water (Litres)", water)
+st.metric(
+    "Recommended Water Intake (L/day)",
+    water
+)
 
-# ---------------- FOOD SEARCH ----------------
+st.markdown("---")
 
-st.header("🥗 Food Nutrition")
+# =========================
+# FOOD SEARCH
+# =========================
 
-food = st.selectbox("Select Food", list(foods.keys()))
+st.header("🥗 Smart Nutrition")
+
+food = st.selectbox(
+    "Select Food",
+    list(foods.keys())
+)
 
 food_data = foods[food]
 
-df = pd.DataFrame(
+food_df = pd.DataFrame(
     food_data.items(),
-    columns=["Nutrient", "Value"]
+    columns=["Nutrient","Value"]
 )
 
-st.table(df)
+st.dataframe(
+    food_df,
+    use_container_width=True
+)
 
-# ---------------- FOOD COMPARISON ----------------
+# Nutrition Donut
 
-st.header("⚖️ Food Comparison")
+macro_df = pd.DataFrame({
+    "Macro":["Protein","Carbs","Fat"],
+    "Value":[
+        food_data["Protein"],
+        food_data["Carbs"],
+        food_data["Fat"]
+    ]
+})
 
-col1, col2 = st.columns(2)
+fig = px.pie(
+    macro_df,
+    names="Macro",
+    values="Value",
+    hole=0.6,
+    title=f"{food} Macro Distribution"
+)
+
+st.plotly_chart(
+    fig,
+    use_container_width=True
+)
+
+st.markdown("---")
+
+# =========================
+# FOOD COMPARISON
+# =========================
+
+st.header("⚖️ Compare Foods")
+
+col1,col2 = st.columns(2)
 
 with col1:
-    food1 = st.selectbox("Food 1", list(foods.keys()))
+    food1 = st.selectbox(
+        "Food 1",
+        list(foods.keys())
+    )
 
 with col2:
-    food2 = st.selectbox("Food 2", list(foods.keys()), index=1)
+    food2 = st.selectbox(
+        "Food 2",
+        list(foods.keys()),
+        index=1
+    )
 
 compare_df = pd.DataFrame({
     "Nutrient":["Calories","Protein","Carbs","Fat"],
@@ -212,126 +369,166 @@ fig = px.bar(
     title="Food Nutrition Comparison"
 )
 
-st.plotly_chart(fig, use_container_width=True)
+st.plotly_chart(
+    fig,
+    use_container_width=True
+)
 
-# ---------------- BEST FOODS ----------------
+st.markdown("---")
+
+# =========================
+# BEST FOODS
+# =========================
 
 st.header("🏆 Best Foods For Your Goal")
 
 if goal == "Muscle Gain":
+
     st.success("""
-    ✔ Chicken Breast
+✅ Chicken Breast
 
-    ✔ Eggs
+✅ Eggs
 
-    ✔ Paneer
+✅ Paneer
 
-    ✔ Oats
+✅ Oats
 
-    ✔ Peanut Butter
-    """)
+✅ Peanut Butter
+
+✅ Fish
+""")
 
 elif goal == "Weight Loss":
+
     st.success("""
-    ✔ Broccoli
+✅ Broccoli
 
-    ✔ Apple
+✅ Apple
 
-    ✔ Banana
+✅ Banana
 
-    ✔ Chicken Breast
+✅ Chicken Breast
 
-    ✔ Oats
-    """)
+✅ Oats
+
+✅ Fish
+""")
 
 else:
+
     st.success("""
-    ✔ Rice
+✅ Rice
 
-    ✔ Milk
+✅ Fruits
 
-    ✔ Fruits
+✅ Milk
 
-    ✔ Vegetables
+✅ Eggs
 
-    ✔ Eggs
-    """)
+✅ Vegetables
+""")
 
-# ---------------- MEAL PLAN ----------------
+st.markdown("---")
 
-st.header("🍽 Sample Meal Plan")
+# =========================
+# MEAL PLAN
+# =========================
+
+st.header("🍽 Personalized Meal Plan")
 
 if goal == "Muscle Gain":
 
     st.info("""
-    Breakfast:
-    Oats + Milk + Banana
+Breakfast:
+🥣 Oats + Milk + Banana
 
-    Lunch:
-    Rice + Chicken Breast
+Lunch:
+🍚 Rice + Chicken Breast
 
-    Dinner:
-    Paneer + Roti
+Dinner:
+🧀 Paneer + Roti
 
-    Snacks:
-    Peanut Butter Sandwich
-    """)
+Snack:
+🥜 Peanut Butter Sandwich
+""")
 
 elif goal == "Weight Loss":
 
     st.info("""
-    Breakfast:
-    Oats + Apple
+Breakfast:
+🍎 Apple + Oats
 
-    Lunch:
-    Chicken + Salad
+Lunch:
+🥗 Salad + Chicken
 
-    Dinner:
-    Paneer + Vegetables
+Dinner:
+🥦 Vegetables + Paneer
 
-    Snacks:
-    Fruits
-    """)
+Snack:
+🍌 Banana
+""")
 
 else:
 
     st.info("""
-    Breakfast:
-    Milk + Oats
+Breakfast:
+🥣 Oats + Milk
 
-    Lunch:
-    Rice + Dal
+Lunch:
+🍚 Rice + Dal
 
-    Dinner:
-    Roti + Paneer
+Dinner:
+🧀 Paneer + Roti
 
-    Snacks:
-    Fruits
-    """)
+Snack:
+🍎 Fruits
+""")
 
-# ---------------- PROGRESS TRACKER ----------------
+st.markdown("---")
 
-st.header("🎯 Transformation Tracker")
+# =========================
+# GOAL TRACKER
+# =========================
 
-target = st.number_input(
+st.header("🎯 Goal Tracker")
+
+target_weight = st.number_input(
     "Target Weight (kg)",
     30,
     200,
     int(weight)
 )
 
-progress = min(weight / target, 1.0)
+if target_weight > 0:
+    progress = min(weight / target_weight, 1.0)
 
-st.progress(progress)
+    st.progress(progress)
 
-st.write(
-    f"Current Weight: {weight} kg | Target Weight: {target} kg"
-)
-
-# ---------------- FOOTER ----------------
+    st.write(
+        f"Current Weight: {weight} kg | Target Weight: {target_weight} kg"
+    )
 
 st.markdown("---")
-st.markdown(
-    "<center>💪 TransformX | Built with Streamlit</center>",
-    unsafe_allow_html=True
-)
+
+# =========================
+# FOOTER
+# =========================
+
+st.markdown("""
+<hr>
+
+<center>
+
+<h3>🏋️ Fitness Buddy</h3>
+
+<p>
+Track nutrition, compare foods, calculate calories,
+and achieve your dream physique.
+</p>
+
+<p>
+Made with ❤️ using Streamlit
+</p>
+
+</center>
+""", unsafe_allow_html=True)
